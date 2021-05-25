@@ -1,23 +1,20 @@
-// variables for submission form
+// reference variables for submission form
 var userFormEl = document.querySelector("#user-form");
 var nameInputEl = document.querySelector("#username");
-
-// variables for repository display
+// reference variables for repository display
 var repoContainerEl = document.querySelector("#repos-container");
 var repoSearchTerm = document.querySelector("#repo-search-term");
 
 // function to get user input from form
 var formSubmitHandler = function(event) {
     // prevent page from reloading when submit button is clicked
-
     event.preventDefault();
+
     // get value from input element
     var username = nameInputEl.value.trim();
-
     // if user submitted a username, pass it as an argument to getUserRepos 
     if (username) {
         getUserRepos(username);
-
         // reset input field to blank
         nameInputEl.value = "";
     } else {
@@ -26,14 +23,12 @@ var formSubmitHandler = function(event) {
     }
 };
 
-// function to request data from the api and console.log it 
+// function to request data from the api
 var getUserRepos = function(user) {
     // format the github api url
     var apiUrl = "https://api.github.com/users/" + user + "/repos";
-
     // make request to the url
     fetch(apiUrl).then(function(response) {
-
         // request was successful
         if (response.ok) {
             // parse the response into a javascript array
@@ -53,7 +48,7 @@ var getUserRepos = function(user) {
     });
 };
 
-// function to accept both the array and term we searched for as parameters
+// function to generate dom elements using the response data
 var displayRepos = function(repos, searchTerm) {
     // check if api returned any repos
     if (repos.length === 0) {
@@ -75,18 +70,13 @@ var displayRepos = function(repos, searchTerm) {
         // create a container for each repo
         var repoEl = document.createElement('div');
         repoEl.classList = 'list-item flex-row justify-space-between align-center';
-
         // create a span element to hold repository name
         var titleEl = document.createElement('span');
         titleEl.textContent = repoName;
 
-        // append title to container
-        repoEl.appendChild(titleEl);
-
         // create a status element
         var statusEl = document.createElement('span');
         statusEl.classList = 'flex-row align-center';
-
         // check if current repo has issues or not
         if (repos[i].open_issues_count > 0) {
             // apply red 'X' if there are issues
@@ -96,10 +86,11 @@ var displayRepos = function(repos, searchTerm) {
             statusEl.innerHTML = "<i class='fas fa-check-square status-icon icon-success'></i>";
         }
 
+        // append title to container
+        repoEl.appendChild(titleEl);
         // append status to container
         repoEl.appendChild(statusEl);
-
-        // append container to the dom
+        // append repo container to the dom
         repoContainerEl.appendChild(repoEl);
     }
 };
