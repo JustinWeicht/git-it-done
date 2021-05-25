@@ -58,7 +58,6 @@ var displayRepos = function(repos, searchTerm) {
 
     // clear old data
     repoContainerEl.textContent = "";
-
     // display user input in left column header
     repoSearchTerm.textContent = searchTerm;
 
@@ -68,10 +67,14 @@ var displayRepos = function(repos, searchTerm) {
         var repoName = repos[i].owner.login + '/' + repos[i].name;
 
         // create a container for each repo
-        var repoEl = document.createElement('div');
+        var repoEl = document.createElement('a');
+        // add classes to the newly created container
         repoEl.classList = 'list-item flex-row justify-space-between align-center';
+        // add a link for the single-repo.html file 
+        repoEl.setAttribute("href", "./single-repo.html?repo=" + repoName);
         // create a span element to hold repository name
         var titleEl = document.createElement('span');
+        // display the repository's name as the title
         titleEl.textContent = repoName;
 
         // create a status element
