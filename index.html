@@ -11,6 +11,7 @@
   <title>Git it Done</title>
 </head>
 
+<!-- header section -->
 <body class="flex-column min-100-vh">
   <header class="hero">
     <h1 class="app-title"><i class="fab fa-github"></i> Git it Done!</h1>
@@ -18,7 +19,7 @@
     </p>
   </header>
 
-  <!-- right column/search by user section -->
+<!-- top left/search section -->
   <main class="flex-row justify-space-between">
     <div class="col-12 col-md-4">
       <div class="card">
@@ -29,18 +30,28 @@
           <button type="submit" class="btn">Get User</button>
         </form>
       </div>
+
+      <!-- sort by/bottom left section -->
+      <div class="card">
+        <h3 class="card-header text-uppercase">Search By Topic</h3>
+        <div id="language-buttons" class="card-body">
+          <button data-language="javascript" class="btn">JavaScript</button>
+          <button data-language="html" class="btn">HTML</button>
+          <button data-language="css" class="btn">CSS</button>
+        </div>
+      </div>
     </div>
 
-    <!-- left column/showing repositories for section -->
+    <!-- results/right column -->
     <div class="col-12 col-md-8">
       <h2 class="subtitle">Showing Repositories for: <span id="repo-search-term"></span></h2>
       <div id="repos-container" class="list-group">
-        
+
       </div>
     </div>
   </main>
 
-  <!-- local js script -->
+  <!-- js scripts -->
   <script src="./assets/js/homepage.js"></script>
 </body>
 

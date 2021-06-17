@@ -3,29 +3,49 @@ var issueContainerEl = document.querySelector("#issues-container");
 // reference for limit warning container
 var limitWarningEl = document.querySelector("#limit-warning");
 
-// function request data from api
+// repo name function
+var getRepoName = function() {
+    // grab repo name from url query string
+    var queryString = document.location.search;
+    var repoName = queryString.split("=")[1];
+  
+    // if repo name exists, then --
+    if (repoName) {
+        // display repo name on the page
+        repoNameEl.textContent = repoName;
+        // display issues of the repo
+        getRepoIssues(repoName);
+    } else {
+        // if no repo was given, redirect to the homepage
+        document.location.replace("./index.html");
+    }
+};
+
+// function to request data from the api
 var getRepoIssues = function(repo) {
     // format the github api url
     var apiUrl = "https://api.github.com/repos/" + repo + "/issues?direction=asc";
     // make request to the url
     fetch(apiUrl).then(function(response) {
-        // fetch response was successful
+        // request was successful
         if (response.ok) {
-            // parse the response into javascript array
+            // parse the response into a javascript array
             response.json().then(function(data) {
-                // pass response data to dom function
+                // parse response data to dom function
                 displayIssues(data);
 
-                // check if api has paginated (more than 30) issues
-                if (response.headers.get("Link")) {
+                // check if api has paginated issues
+                if (response.headers.get("link")) {
                     displayWarning(repo);
                 }
-            });
+            });            
         } else {
+            // alert the user that there was a problem with the request
             alert("There was a problem with your request.");
         }
     });
 };
+
 
 // function to generate dom elements using the response data
 var displayIssues = function(issues) {
@@ -57,9 +77,9 @@ var displayIssues = function(issues) {
             typeEl.textContent = "(Issue)";
         }
 
-        // append title to issue container
+        // append title to issueEl container
         issueEl.appendChild(titleEl);
-        // append type to issue container
+        // append type to issueEl container
         issueEl.appendChild(typeEl)
         // append issue container to the dom
         issueContainerEl.appendChild(issueEl); 
@@ -83,4 +103,5 @@ var displayWarning = function(repo) {
     limitWarningEl.appendChild(linkEl);
 };
 
-getRepoIssues("expressjs/express");
+getRepoName();
+getRepoIssues("angular/angular");

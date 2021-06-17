@@ -1,6 +1,10 @@
 // reference variables for submission form
+// ENTIRE FORM SECTION
 var userFormEl = document.querySelector("#user-form");
-var nameInputEl = document.querySelector("#username");
+// programming language section 
+var languageButtonsEl = document.querySelector("#language-buttons")
+// USER SEARCH INPUT
+var nameInputEl = document.querySelector("#username"); 
 // reference variables for repository display
 var repoContainerEl = document.querySelector("#repos-container");
 var repoSearchTerm = document.querySelector("#repo-search-term");
@@ -15,11 +19,25 @@ var formSubmitHandler = function(event) {
     // if user submitted a username, pass it as an argument to getUserRepos 
     if (username) {
         getUserRepos(username);
+        // clear old repos
+        repoContainerEl.textContent = "";
         // reset input field to blank
         nameInputEl.value = "";
     } else {
         // if user did not fill out anything, prompt them to do so
         alert("Please enter a GitHub username");
+    }
+};
+var buttonClickHandler = function(event) {
+    // get the language attribute from the clicked element
+    var language = event.target.getAttribute("data-language");
+  
+    // if clicked 
+    if (language) {
+        getFeaturedRepos(language);
+  
+        // clear old repos
+        repoContainerEl.textContent = "";
     }
 };
 
@@ -47,6 +65,24 @@ var getUserRepos = function(user) {
         alert("Unable to connet to GitHub");
     });
 };
+
+// language btn click function
+var getFeaturedRepos = function(language) {
+    // format the github api url
+    var apiUrl = "https://api.github.com/search/repositories?q=" + language + "+is:featured&sort=help-wanted-issues";
+  
+    // make a get request to url
+    fetch(apiUrl).then(function(response) {
+      // request was successful
+      if (response.ok) {
+        response.json().then(function(data) {
+          displayRepos(data.items, language);
+        });
+      } else {
+        alert("Error: " + response.statusText);
+      }
+    });
+  };
 
 // function to generate dom elements using the response data
 var displayRepos = function(repos, searchTerm) {
@@ -100,3 +136,4 @@ var displayRepos = function(repos, searchTerm) {
 
 // event listener for form submission
 userFormEl.addEventListener("submit", formSubmitHandler);
+languageButtonsEl.addEventListener("click", buttonClickHandler);
